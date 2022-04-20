@@ -66,7 +66,7 @@ public class Todo {
         user.removeTodo(this,true);
     }
 
-    public Set<Tag> getTodolist(){
+    public Set<Tag> getTaglist(){
         return tagList;
     }
 
@@ -77,7 +77,7 @@ public class Todo {
     public void addTag (Tag tag, boolean otherSideHasBeenSet){
         if (otherSideHasBeenSet) return;
         tag.addTodo(this,true);
-        this.getTodolist().add(tag);
+        this.getTaglist().add(tag);
 
     }
 
@@ -88,9 +88,11 @@ public class Todo {
     public void removeTag (Tag tag, boolean otherSideHasBeenSet){
         if (otherSideHasBeenSet) return;
         tag.removeTodo(this,true);
-        getTodolist().remove(tag);
+        getTaglist().remove(tag);
 
     }
+
+
 
     @Override
     public String toString() {
@@ -178,5 +180,13 @@ public class Todo {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public Set<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(Set<Tag> tagList) {
+        this.tagList = tagList;
     }
 }

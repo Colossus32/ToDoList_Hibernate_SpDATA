@@ -1,39 +1,71 @@
 package com.colossus.todolist.services;
 
 import com.colossus.todolist.domain.User;
+import com.colossus.todolist.domain.plainObjects.UserPojo;
 import com.colossus.todolist.services.interfaces.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.colossus.todolist.utils.Converter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService {
 
+    private final Converter converter;
 
+    @PersistenceContext
+    EntityManager entityManager;
 
-    @Autowired
-    public UserService() {
+    public UserService(Converter converter) {
+        this.converter = converter;
     }
 
     @Override
-    public int createUser(User user) {
-        return 0;
+    @Transactional
+    public UserPojo createUser(User user) {
+
+        entityManager.persist(user);
+
+        return converter.userToPojo(user);
     }
 
     @Override
-    public User getUser(long id) {
+    @Transactional(readOnly = true)
+    public UserPojo getUser(long id) {
+
+
+        User foundUser = entityManager.createQuery("SELECT user FROM User user WHERE user.id = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return converter.userToPojo(foundUser);
+    }
+
+    @Override
+    public UserPojo updateUser(User updatedUser, long id) {
 
         return null;
     }
 
     @Override
-    public int updateUser(User updatedUser, long id) {
+    public UserPojo deleteUser(long id) {
 
-        return 0;
+        return null;
     }
 
     @Override
-    public int deleteUser(long id) {
+    @Transactional(readOnly = true)
+    public List<UserPojo> getAllUsers() {
+        List<User> userList = entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
 
-        return 0;
+        List<UserPojo> result = userList.stream()
+                .map(converter::userToPojo)
+                .collect(Collectors.toList());
+
+        return result;
     }
 }
