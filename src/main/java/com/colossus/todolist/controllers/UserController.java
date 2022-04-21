@@ -32,6 +32,18 @@ public class UserController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @PutMapping (path = "/user/{id}")
+    public ResponseEntity<UserPojo> updateUser (@PathVariable long id, @RequestBody User source){
+        UserPojo result = userService.updateUser(source, id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/user/{id}")
+    public ResponseEntity<String> deleteUser (@PathVariable long id){
+        String result = userService.deleteUser(id);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
     @GetMapping(path = "/users")
     public ResponseEntity<List<UserPojo>> getAllUsers(){
         List<UserPojo> result = userService.getAllUsers();
