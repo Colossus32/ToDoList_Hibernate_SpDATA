@@ -4,10 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TagPojo {
+
     private long id;
-
     private String name;
-
     private Set<Long> todoListIds = new HashSet<>();
 
     public long getId() {

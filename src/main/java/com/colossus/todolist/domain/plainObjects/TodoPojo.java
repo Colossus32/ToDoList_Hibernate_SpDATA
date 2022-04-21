@@ -9,22 +9,14 @@ import java.util.Set;
 public class TodoPojo {
 
     private long id;
-
     private String name;
-
     private String comment;
-
     private Date startDate;
-
     private Date endDate;
-
     private boolean important;
-
     private Priority priority;
-
     private long userId;
-
-    private Set<TagPojo> tagListIds = new HashSet<>();
+    private Set<TagPojo> tagList = new HashSet<>();
 
     public long getId() {
         return id;
@@ -90,11 +82,11 @@ public class TodoPojo {
         this.userId = userId;
     }
 
-    public Set<TagPojo> getTagListIds() {
-        return tagListIds;
+    public Set<TagPojo> getTagList() {
+        return tagList;
     }
 
-    public void setTagListIds(Set<TagPojo> tagListIds) {
-        this.tagListIds = tagListIds;
+    public void setTagList(Set<TagPojo> tagList) {
+        this.tagList = tagList;
     }
 }

@@ -40,7 +40,7 @@ public class Converter {
         result.setPriority(source.getPriority());
         result.setUserId(source.getUser().getId());
 
-        result.setTagListIds(source.getTagList()
+        result.setTagList(source.getTagList()
                 .stream()
                 .map(tag -> tagToPojo(tag))
                 .collect(Collectors.toSet()));
@@ -53,9 +53,8 @@ public class Converter {
 
         result.setId(source.getId());
         result.setName(source.getName());
-        result.setTodoListIds(source.getTodoList()
-                .stream()
-                .map(Todo::getId)
+        result.setTodoListIds(source.getTodoList().stream()
+                .map(todo -> todo.getId())
                 .collect(Collectors.toSet()));
 
         return result;
