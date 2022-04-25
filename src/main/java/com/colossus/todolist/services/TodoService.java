@@ -4,6 +4,7 @@ import com.colossus.todolist.domain.Tag;
 import com.colossus.todolist.domain.Todo;
 import com.colossus.todolist.domain.User;
 import com.colossus.todolist.domain.plainObjects.TodoPojo;
+import com.colossus.todolist.exceptions.CustomEmptyDataException;
 import com.colossus.todolist.repositories.TodoRepository;
 import com.colossus.todolist.repositories.UserRepository;
 import com.colossus.todolist.services.interfaces.ITagService;
@@ -56,7 +57,7 @@ public class TodoService implements ITodoService {
 
         } else {
 
-            return converter.todoToPojo(new Todo());
+            throw new CustomEmptyDataException("unable to get user for the todo");
         }
     }
 
@@ -71,7 +72,7 @@ public class TodoService implements ITodoService {
             return converter.todoToPojo(todoOptional.get());
         } else {
 
-            return converter.todoToPojo(new Todo());
+            throw new NoSuchElementException("unable to get todo");
         }
     }
 
@@ -95,7 +96,8 @@ public class TodoService implements ITodoService {
 
             return converter.todoToPojo(target);
         } else {
-            return converter.todoToPojo(new Todo());
+
+            throw new NoSuchElementException("unable to update todo");
         }
     }
 
@@ -113,7 +115,7 @@ public class TodoService implements ITodoService {
             return "Todo with id = " + todoId + " from User: "+ todoForDeleteOptional.get().getUser().getId() + " was successfully removed";
         } else {
 
-            return "Todo with id = " + todoId + " doesn't exist";
+            throw new NoSuchElementException("unable to delete todo");
         }
     }
 
@@ -123,8 +125,12 @@ public class TodoService implements ITodoService {
 
         Optional<User> userOptional = userRepository.findById(userId);
 
-        return userOptional.map(user -> todoRepository.findAllByUser(user).stream()
-                .map(converter::todoToPojo)
-                .collect(Collectors.toList())).orElseGet(ArrayList::new);
+        if(userOptional.isPresent()) {
+            return userOptional.map(user -> todoRepository.findAllByUser(user).stream()
+                    .map(converter::todoToPojo)
+                    .collect(Collectors.toList())).orElseGet(ArrayList::new);
+        }else {
+            throw new NoSuchElementException(" No user with id = " + userId + " was found");
+        }
     }
 }

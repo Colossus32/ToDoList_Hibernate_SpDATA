@@ -2,10 +2,12 @@ package com.colossus.todolist.services;
 
 import com.colossus.todolist.domain.User;
 import com.colossus.todolist.domain.plainObjects.UserPojo;
+import com.colossus.todolist.exceptions.CustomEmptyDataException;
 import com.colossus.todolist.repositories.UserRepository;
 import com.colossus.todolist.services.interfaces.IUserService;
 import com.colossus.todolist.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +45,7 @@ public class UserService implements IUserService {
         if (foundUserOptional.isPresent()){
             return converter.userToPojo(foundUserOptional.get());
         }else {
-            return converter.userToPojo(new User());
+            throw new CustomEmptyDataException("unable to get user");
         }
     }
 
@@ -59,7 +61,7 @@ public class UserService implements IUserService {
             userRepository.save(target);
             return converter.userToPojo(target);
         } else {
-            return converter.userToPojo(new User());
+            throw new CustomEmptyDataException("unable to update user");
         }
     }
 
@@ -73,7 +75,7 @@ public class UserService implements IUserService {
             userRepository.delete(userForDeleteOptional.get());
             return "User with id = " + id + " was successfully removed";
         } else {
-            return "User with id = " + id + " doesn't exist";
+            throw new CustomEmptyDataException("unable to delete user");
         }
     }
 

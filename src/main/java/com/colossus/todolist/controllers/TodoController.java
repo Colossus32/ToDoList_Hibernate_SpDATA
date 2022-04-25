@@ -2,12 +2,18 @@ package com.colossus.todolist.controllers;
 
 import com.colossus.todolist.domain.Todo;
 import com.colossus.todolist.domain.plainObjects.TodoPojo;
+import com.colossus.todolist.exceptions.CustomEmptyDataException;
 import com.colossus.todolist.services.interfaces.ITodoService;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class TodoController {
@@ -42,5 +48,43 @@ public class TodoController {
     @GetMapping(path = "/user/{userId}/todos")
     public ResponseEntity<List<TodoPojo>> getAllTodo (@PathVariable long userId){
         return new ResponseEntity<>(todoService.getAllTodos(userId), HttpStatus.OK);
+    }
+
+    /**
+     * Exception handling
+     */
+
+    @ExceptionHandler
+    public ResponseEntity<String> onMissingTodoName (DataIntegrityViolationException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(exception.getClass()) + ": Name of todo is obligatory");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> onMissingTodoId(NoSuchElementException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(exception.getClass())
+                + " # "
+                + exception.getLocalizedMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> onMissingTodo (EmptyResultDataAccessException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(exception.getClass()) + ": no one todo was found");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> SQLProblems (SQLException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(exception.getClass())
+                + exception.getSQLState()
+                + exception.getLocalizedMessage()
+                + ": something went wrong with todo");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> customExceptionHandler (CustomEmptyDataException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(exception.getClass())
+                + " "
+                + exception.getCause()
+                + " "
+                + exception.getLocalizedMessage());
     }
 }
