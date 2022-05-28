@@ -37,6 +37,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
+    public UserPojo findUserByEmailAndPassword (String email, String password){
+        Optional<User> userOptional = userRepository.findByEmailAndPassword(email, password);
+        return userOptional.map(converter::userToPojo).orElse(null);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public UserPojo getUser(long id) {
 
