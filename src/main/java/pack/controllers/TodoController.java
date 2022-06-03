@@ -1,4 +1,4 @@
-package com.colossus.todolist.controllers;
+package pack.controllers;
 
 import com.colossus.todolist.annotations.Authenticational;
 import com.colossus.todolist.domain.Todo;
