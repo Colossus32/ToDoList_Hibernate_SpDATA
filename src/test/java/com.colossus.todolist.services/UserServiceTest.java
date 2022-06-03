@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -107,5 +108,14 @@ public class UserServiceTest {
         newUser.setPassword(PASSWORD);
 
         return newUser;
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void testUniqueUserEmail(){
+
+        User user = createSimpleUser();
+        User user2 = createSimpleUser();
+        userService.createUser(user);
+        userService.createUser(user2);
     }
 }

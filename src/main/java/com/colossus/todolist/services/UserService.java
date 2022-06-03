@@ -7,7 +7,6 @@ import com.colossus.todolist.repositories.UserRepository;
 import com.colossus.todolist.services.interfaces.IUserService;
 import com.colossus.todolist.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
