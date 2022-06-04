@@ -51,11 +51,11 @@ public class ControllersIntegrationTest {
         this.mockMvc.perform(post("/user/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content("{\"email\": \"email\", \"password\": \"123\"}"))
+                .content("{\"email\": \"email@gmail.com\", \"password\": \"123\"}"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("email").value("email"))
+                .andExpect(jsonPath("email").value("email@gmail.com"))
                 .andExpect(jsonPath("password").value("123"))
                 .andExpect(jsonPath("id").isNotEmpty());
     }

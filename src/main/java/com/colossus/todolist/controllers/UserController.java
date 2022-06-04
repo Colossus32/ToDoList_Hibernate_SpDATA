@@ -1,4 +1,4 @@
-package pack.controllers;
+package com.colossus.todolist.controllers;
 
 import com.colossus.todolist.domain.User;
 import com.colossus.todolist.domain.plainObjects.UserPojo;
