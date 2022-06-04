@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,6 +61,15 @@ public class ControllersIntegrationTest {
                 .andExpect(jsonPath("id").isNotEmpty());
     }
 
+    //deleting created in previous test user, run pack tests
+    @Test
+    public void deleteUser() throws Exception{
+
+        this.mockMvc.perform(delete("/user/{id}", "1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     @Test
     public void getUser() throws Exception{
 
@@ -76,4 +86,5 @@ public class ControllersIntegrationTest {
                 .andExpect(jsonPath("password").value("123"))
                 .andExpect(jsonPath("id").value(1));
     }
+
 }
